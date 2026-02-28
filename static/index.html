@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | Blackwolf</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="app" id="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="logo">TaskFlow</h1>
+                <span class="logo-sub">Blackwolf</span>
+            </div>
+            <div class="header-right">
+                <button class="btn-icon" id="btn-theme" title="Cambiar tema">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Nav -->
+        <nav class="main-nav" id="main-nav">
+            <button class="nav-btn active" data-view="tasks">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                Tareas
+            </button>
+            <button class="nav-btn" data-view="dashboard">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                Dashboard
+            </button>
+            <button class="nav-btn" data-view="management">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                Gestion
+            </button>
+        </nav>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!-- VIEW: TASKS                                      -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="view-tasks" class="view view-narrow">
+            <!-- Person tabs -->
+            <div class="person-tabs" id="person-tabs"></div>
+
+            <!-- Stats -->
+            <div class="stats-bar" id="stats-bar"></div>
+
+            <!-- Quick Add -->
+            <div class="quick-add">
+                <input type="text" id="input-tarea" placeholder="Escribe una tarea... (ej: Revisar contrato manana, prioridad alta)" autocomplete="off">
+                <button class="btn-primary" id="btn-add">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+            </div>
+
+            <!-- Filters: estado -->
+            <div class="filters" id="estado-filters"></div>
+
+            <!-- Filters: periodo -->
+            <div class="filters periodo-filters" id="periodo-filters"></div>
+
+            <!-- Tasks -->
+            <div class="tasks" id="tasks-container">
+                <div class="loading" id="loading">Cargando tareas...</div>
+            </div>
+
+            <!-- Empty state -->
+            <div class="empty-state" id="empty-state" style="display:none">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                <p>No hay tareas. Escribe arriba o manda un mensaje por Discord.</p>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!-- VIEW: DASHBOARD                                   -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="view-dashboard" class="view view-wide" style="display:none">
+            <div id="dashboard-content"></div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!-- VIEW: MANAGEMENT                                  -->
+        <!-- ════════════════════════════════════════════════ -->
+        <section id="view-management" class="view view-wide" style="display:none">
+            <div id="management-content"></div>
+        </section>
+    </div>
+
+    <!-- Modal editar -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Editar tarea</h2>
+                <button class="btn-icon" id="btn-close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-id">
+                <label>Titulo</label>
+                <input type="text" id="edit-titulo">
+                <label>Descripcion</label>
+                <textarea id="edit-descripcion" rows="3"></textarea>
+                <div class="modal-row">
+                    <div>
+                        <label>Estado</label>
+                        <select id="edit-estado"></select>
+                    </div>
+                    <div>
+                        <label>Prioridad</label>
+                        <select id="edit-prioridad"></select>
+                    </div>
+                </div>
+                <div class="modal-row">
+                    <div>
+                        <label>Categoria</label>
+                        <select id="edit-categoria"></select>
+                    </div>
+                    <div>
+                        <label>Asignado a</label>
+                        <select id="edit-asignado"></select>
+                    </div>
+                </div>
+                <label>Fecha limite</label>
+                <input type="date" id="edit-fecha">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-danger" id="btn-delete">Eliminar</button>
+                <button class="btn-primary" id="btn-save">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+    <script src="/static/dashboard.js"></script>
+    <script src="/static/management.js"></script>
+    <script src="/static/orgchart.js"></script>
+</body>
+</html>
