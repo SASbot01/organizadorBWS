@@ -36,12 +36,13 @@ async def startup():
 
 # ── Frontend ──────────────────────────────────────────────
 
-app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+_static_dir = BASE_DIR / "static"
+if _static_dir.is_dir():
+    app.mount("/static", StaticFiles(directory=str(_static_dir)), name="static")
 
-
-@app.get("/")
-async def index():
-    return FileResponse(str(BASE_DIR / "static" / "index.html"))
+    @app.get("/")
+    async def index():
+        return FileResponse(str(_static_dir / "index.html"))
 
 
 # ── API REST - Tareas ────────────────────────────────────
