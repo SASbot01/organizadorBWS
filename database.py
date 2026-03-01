@@ -1,8 +1,9 @@
+import os
 import aiosqlite
 import uuid
 from datetime import datetime, date, timedelta
 
-DB_PATH = "tareas.db"
+DB_PATH = "/tmp/tareas.db" if os.environ.get("VERCEL") else "tareas.db"
 
 
 async def init_db():

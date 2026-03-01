@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -8,6 +10,8 @@ import threading
 import logging
 
 load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent
 
 from database import (
     init_db, crear_tarea, listar_tareas, obtener_tarea, actualizar_tarea, eliminar_tarea,
@@ -32,12 +36,12 @@ async def startup():
 
 # ── Frontend ──────────────────────────────────────────────
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 
 @app.get("/")
 async def index():
-    return FileResponse("static/index.html")
+    return FileResponse(str(BASE_DIR / "static" / "index.html"))
 
 
 # ── API REST - Tareas ────────────────────────────────────
